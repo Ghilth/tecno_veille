@@ -1,5 +1,5 @@
 
-# 🔍 Scholarly Search & Summarization  
+# 🔍 Scholarly Search
 
 A Python project that enables academic article searches using the Serper API, with year range filtering and automatic summarization of articles from their links.  
 

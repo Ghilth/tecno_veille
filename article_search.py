@@ -101,7 +101,8 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
 
 # Exemple d'utilisation avec tranche d'années
 mots_cles = ["model depoyment", "deep learning"]
-annee_debut = 2018
+annee_debut = 201
 annee_fin = 2024
 
-search_articles(mots_cles,annee_debut,annee_fin)
+#print(search_articles(mots_cles,annee_debut,annee_fin))
+print(summarize("https://kinsta.com/fr/base-de-connaissances/site-statique/")) 

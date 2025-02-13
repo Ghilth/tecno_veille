@@ -5,5 +5,9 @@ requests-oauthlib==2.0.0
 requests-toolbelt==1.0.0
 transformers==4.48.2
 streamlit
-torch torchvision torchaudio
-tensorflow 
+torch
+torchvision
+torchaudio
+tensorflow==2.18.0
+tensorflow-io-gcs-filesystem==0.31.0
+tensorflow_intel==2.18.0
