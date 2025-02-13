@@ -98,3 +98,10 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
     
     return resultats
 
+
+# Exemple d'utilisation avec tranche d'années
+mots_cles = ["model depoyment", "deep learning"]
+annee_debut = 2018
+annee_fin = 2024
+
+search_articles(mots_cles,annee_debut,annee_fin)
