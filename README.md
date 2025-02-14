@@ -22,4 +22,3 @@ Avant de commencer, assurez-vous d'installer les dépendances nécessaires et d'
 - **Pandas** pour gérer les résultats et les exporter au format CSV
 - **Une clé API Serper** pour interagir avec Google Scholar via l'API
 
-### 1. Installation des Dépendances
