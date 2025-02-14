@@ -2,14 +2,15 @@ import http.client
 import json
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 import os
 from transformers import pipeline
 
 
 
-#load key
-api_key = os.getenv("api_key")
 
+load_dotenv()  # Charge les variables depuis .env
+api_key = os.getenv("api_key")  # Récupère la clé API
 
 
 def summarize(lien):
@@ -50,6 +51,9 @@ def summarize(lien):
 
 
 def search_articles(mots_cles, annee_debut=None, annee_fin=None):
+
+    print("Clé API utilisée :", api_key)  # Vérification
+
     # Connexion à l'API
     conn = http.client.HTTPSConnection("google.serper.dev")
     
@@ -65,6 +69,8 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
     conn.request("POST", "/scholar", payload, headers)
     res = conn.getresponse()
     data = res.read()
+
+    print("Réponse brute de l'API:", data)  # 🔍 Debug
     
     # Convertir la réponse en format JSON
     articles = json.loads(data.decode("utf-8"))
@@ -89,7 +95,7 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
                 "Titre": article.get("title", ""),
                 "Lien": article.get("link", ""),
                 "Extrait": article.get("snippet", ""),
-                "Resume": summarize(article.get("link", "")),
+                #"Resume": summarize(article.get("link", "")),
                 "Auteur": article.get("author", ""),
                 "Année": annee_article,
                 "Citations": article.get("citedBy", "")
@@ -100,9 +106,10 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
 
 
 # Exemple d'utilisation avec tranche d'années
-mots_cles = ["model depoyment", "deep learning"]
-annee_debut = 201
-annee_fin = 2024
+#mots_cles = ["model depoyment", "deep learning"]
+#annee_debut = 2018
+#annee_fin = 2024
 
 #print(search_articles(mots_cles,annee_debut,annee_fin))
-print(summarize("https://kinsta.com/fr/base-de-connaissances/site-statique/")) 
+#print(summarize("https://kinsta.com/fr/base-de-connaissances/site-statique/")) 
+
