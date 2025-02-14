@@ -1,55 +1,102 @@
 import streamlit as st
+import pandas as pd
 from article_search import search_articles
 
-# Personnalisation de la page
-st.set_page_config(page_title="Academic Paper Search", page_icon="🔎", layout="centered")
+# -------------------------------
+# 🎨 INTERFACE STREAMLIT 
+# -------------------------------
+
+# 🖼️ Configuration de la page
+st.set_page_config(page_title="Veille Technologique", layout="wide", page_icon="🔍")
+
+# 🌙 Mode sombre ou clair
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .stTextInput>div>div>input {
+            font-size: 18px !important;
+            padding: 10px;
+        }
+        .result-box {
+            padding: 15px;
+            border-radius: 10px;
+            background-color: white;
+            margin-bottom: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .result-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .result-excerpt {
+            font-size: 14px;
+            color: #333;
+        }
+        .result-meta {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Interface principale
-st.markdown("<h1 style='text-align: center;'>🔎 Academic Paper Search</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size:18px;'>Recherchez des articles scientifiques pertinents.</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>🔎 Veille Technologique</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 18px;'>Recherchez des articles scientifiques récents</p>", unsafe_allow_html=True)
 
-# Barre de recherche
-with st.form("search_form"):
-    st.markdown("### 🔍 Recherchez un article scientifique")
-    keywords = st.text_input("**Entrez un mot-clé ou une phrase :**", placeholder="Exemple : intelligence artificielle")
+
+# Saisie des mots-clés avec placeholder dynamique
+
+search_query = st.text_input("Entrez vos mots-clés", placeholder="Ex: Intelligence Artificielle")
+
+
+# Sélection de la plage d’années
+col1, col2 = st.columns(2)
+with col1:
+    annee_debut = st.number_input("📅 Année de début", min_value=2000, max_value=2025, value=2018)
+with col2:
+    annee_fin = st.number_input("📅 Année de fin", min_value=2000, max_value=2025, value=2024)
+
+
+
+# 🔍 Bouton de recherche
+if st.button("🔍 Rechercher"):
+    mots_cles = [mot.strip() for mot in search_query.split(",") if mot.strip()]
     
-    col1, col2 = st.columns(2)
-    start_year = col1.number_input("📅 Année de début", min_value=2000, max_value=2025, value=2022)
-    end_year = col2.number_input("📅 Année de fin", min_value=2000, max_value=2025, value=2025)
-
-    # Bouton de recherche
-    search_button = st.form_submit_button("🔎 Rechercher", use_container_width=True)
-
-# Lancement de la recherche si le bouton est cliqué
-if search_button:
-    if not keywords.strip():
-        st.error("⚠️ Veuillez entrer un mot-clé valide.")
-    elif start_year > end_year:
-        st.error("⚠️ L'année de début ne peut pas être supérieure à l'année de fin.")
+    if not mots_cles:
+        st.warning("⚠️ Veuillez entrer au moins un mot-clé.")
     else:
         with st.spinner("🔄 Recherche en cours..."):
-            articles = search_articles(keywords, start_year, end_year)
+            resultats = search_articles(mots_cles, annee_debut, annee_fin)
 
-        # Affichage des résultats
-        if not articles:
-            st.warning("❌ Aucun article trouvé pour cette période.")
+        if resultats:
+            st.success(f"✅ {len(resultats)} articles trouvés !")
+
+            # 📄 Affichage des résultats
+            for article in resultats:
+                st.markdown(
+                    f"""
+                    <div class="result-box">
+                        <a class="result-title" href="{article['Lien']}" target="_blank">{article['Titre']}</a>
+                        <p class="result-excerpt">{article['Extrait']}</p>
+                        <p class="result-meta">🖊️ {article['Auteur']} | 📅 {article['Année']} | 🔗 <a href="{article['Lien']}" target="_blank">Lire l'article</a></p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            # 📥 Téléchargement des résultats
+            df = pd.DataFrame(resultats)
+            csv = df.to_csv(index=False).encode("utf-8")
+            st.download_button("📥 Télécharger les résultats (CSV)", csv, "articles.csv", "text/csv")
         else:
-            st.success(f"✅ {len(articles)} articles trouvés")
+            st.warning("❌ Aucun article trouvé.")
 
-            for article in articles:
-                title = article.get('Titre', 'Titre inconnu')
-                year = article.get('Année', 'Année inconnue')
-                snippet = article.get('Extrait', 'Aucun extrait disponible')
-                link = article.get('Lien', '')
-                citations = article.get('Citations', 'Non disponible')
-
-                with st.expander(f"📌 **{title}** ({year})"):
-                    st.write(f"📝 **Extrait** : {snippet}")
-                    
-                    # Vérification si un lien est disponible
-                    if link and link.startswith("http"):
-                        st.markdown(f"🔗 [**Lire l'article**]({link})")
-                    else:
-                        st.write("🔗 Lien non disponible")
-
-                    st.write(f"📊 **Citations** : {citations}")
+st.markdown("---")
+st.markdown("<p style='text-align: center;'>📚 Développé avec ❤️ en Python & Streamlit</p>", unsafe_allow_html=True)

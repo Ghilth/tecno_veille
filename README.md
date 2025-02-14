@@ -1,46 +1,25 @@
+# **Veille Technologique - Recherche d'Articles Scientifiques**
 
-# 🔍 Scholarly Search
+## **Objectif du Projet**
 
-A Python project that enables academic article searches using the Serper API, with year range filtering and automatic summarization of articles from their links.  
+Ce projet vise à créer une interface simple et conviviale pour rechercher des articles scientifiques en utilisant l'API **Google Scholar** via **Serper API**. Il permet de filtrer les articles par mots-clés et par plage d'années, d'afficher les résultats sous forme de tableaux et de cartes interactives, et de télécharger les résultats au format CSV pour une analyse ultérieure.
 
-## 🚀 Features  
+## **Fonctionnalités Principales**
 
-- **🔎 Advanced Search**: Retrieve academic articles based on keywords.  
-- **📅 Year Range Filtering**: Specify a publication year range to refine results.  
-- **📑 Smart Extraction**: Extracts title, link, snippet, publication year, and citation count for each article.  
-- **✂️ Automatic Summarization**: Generates concise summaries of articles by analyzing their content.  
+- **Recherche d'articles scientifiques** basée sur des mots-clés et une plage d'années spécifique.
+- **Affichage des résultats** sous forme de tableaux et de cartes interactives.
+- **Accès direct** aux articles via des liens cliquables.
+- **Téléchargement des résultats** au format CSV.
+- **Mode clair et sombre** pour une lisibilité optimale.
+- **Interface inspirée des moteurs de recherche** pour une expérience utilisateur fluide et agréable.
 
-## 📦 Installation  
+## **Prérequis**
 
-1. Clone this repository:  
-   ```bash
-   git clone https://github.com/your-username/project-name.git
-   cd project-name
-   ```  
-2. Install dependencies:  
-   ```bash
-   pip install -r requirements.txt
-   ```  
+Avant de commencer, assurez-vous d'installer les dépendances nécessaires et d'avoir une **clé API valide** pour accéder à l'API Serper.
 
-## 🛠️ Usage  
+- **Python 3.x**
+- **Streamlit** pour créer l'interface web
+- **Pandas** pour gérer les résultats et les exporter au format CSV
+- **Une clé API Serper** pour interagir avec Google Scholar via l'API
 
-```python
-
-# Search for "deep learning" articles published between 2015 and 2023
-results = search_articles("deep learning", start_year=2015, end_year=2023)
-
-# Summarize the first article found
-summary = summarize(results[0]["Link"])
-print(summary)
-```
-
-## 📝 Roadmap  
-- 📚 Support for additional academic sources  
-- 📊 Citation trend analysis  
-- 🤖 Improved summarization with advanced AI models  
-
-## 📜 License  
-This project is licensed under **MIT** – free to use and modify.  
-
-🔗 **Contribute**: PRs and suggestions are welcome! 🚀  
-
+### 1. Installation des Dépendances
