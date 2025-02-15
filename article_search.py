@@ -1,53 +1,14 @@
 import http.client
 import json
 import requests
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import os
-from transformers import pipeline
 
 
 
 
 load_dotenv()  # Charge les variables depuis .env
 api_key = os.getenv("api_key")  # Récupère la clé API
-
-
-def summarize(lien):
-    # Étape 1: Récupérer le contenu de la page
-    try:
-        response = requests.get(lien)
-        response.raise_for_status()  # Vérifie si la requête a réussi
-        page_content = response.text
-    except requests.exceptions.RequestException as e:
-        return f"Erreur lors de la récupération de la page : {e}"
-    
-
-    # Étape 2: Extraire le texte de l'article
-    soup = BeautifulSoup(page_content, "html.parser")
-
-    
-    # En fonction de la structure du site, tu devras peut-être ajuster ceci
-    paragraphs = soup.find_all('p')  # Extraire tous les paragraphes <p>
-    
-    # Joindre les paragraphes pour former le texte complet de l'article
-    article_text = " ".join([para.get_text() for para in paragraphs])
-    
-    # Étape 3: Utiliser un modèle pour générer le résumé
-    summarizer = pipeline("summarization")  # Pipeline de résumé de Hugging Face
-    
-    # Diviser le texte en morceaux si nécessaire (limite de longueur pour le modèle)
-    max_input_length = 2000  # La limite de tokens pour de nombreux modèles GPT-2 et GPT-3
-    
-    if len(article_text) > max_input_length:
-        article_text = article_text[:max_input_length]  # Prendre une portion du texte
-
-    # Résumer l'article
-    summary = summarizer(article_text, max_length=150, min_length=50, do_sample=False)
-    
-    return summary[0]['summary_text']
-
-
 
 
 def search_articles(mots_cles, annee_debut=None, annee_fin=None):
