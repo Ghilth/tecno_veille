@@ -15,7 +15,6 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
     if not api_key:
         raise ValueError("La clé API est manquante !")
 
-    print("🔑 Clé API utilisée :", api_key)  # Debugging
 
     # Connexion à l'API
     conn = http.client.HTTPSConnection("google.serper.dev")
@@ -64,7 +63,7 @@ def search_articles(mots_cles, annee_debut=None, annee_fin=None):
             "Titre": article.get("title", ""),
             "Lien": article.get("link", ""),
             "Extrait": article.get("snippet", ""),
-            "Auteur": article.get("author", ""),
+            "Auteur": article.get("publicationInfo", ""),
             "Année": annee_article,
             "Citations": article.get("citedBy", ""),
         }
